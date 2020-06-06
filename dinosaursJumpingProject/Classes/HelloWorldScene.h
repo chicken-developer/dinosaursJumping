@@ -11,11 +11,13 @@ public:
     virtual bool init();
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
-    
+    bool OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
 private:
-   cocos2d::Animate _animate;
+   cocos2d::Animation* _animation;
+   cocos2d::Sprite* spDino;
+   void Move();
    cocos2d::Vector<cocos2d::SpriteFrame*> getAnimation(const char* format, int count);
    cocos2d::Animation* createAnimation(std::string prefixName, int pFrameOrder, float delayTime);
 };

@@ -28,54 +28,45 @@ bool HelloWorld::init(){
     float deviceWidth = MIN(glview->getFrameSize().height, glview->getFrameSize().width);
     deviceHeight = deviceHeight / deviceWidth * 600;
     deviceWidth = 600;
-
 	
     SpriteBatchNode* spriteNode = SpriteBatchNode::create("Textures.png");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Textures.plist");
+    //Dinosaurs animation
+	// Create by tutorial at codeandweb //
+    Vector<SpriteFrame*> frames = getAnimation("Idle (%d).png", 10);
+    auto dinoSprite = Sprite::createWithSpriteFrame(frames.front());
+    dinoSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+    dinoSprite->setScale(0.25);
+    dinoSprite->setPosition(DINO_X + 200,
+        GROUND_HEIGHT - 4);
+    this->addChild(dinoSprite);
+    auto animation = Animation::createWithSpriteFrames(frames, 1.0f / 10);
+    dinoSprite->runAction(RepeatForever::create(Animate::create(animation)));
 
- 
-    //Dinosaurs
-    auto spDino = Sprite::createWithSpriteFrameName("dino_1.png");
+	//Create by tutorial at khoapham.vn //
+    spDino = Sprite::createWithSpriteFrameName("Idle (1).png");
     if (spDino == nullptr) {
         problemLoading("Sprite Dino");
     }
     else {
         spDino->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
-        spDino->setPosition(DINO_X, GROUND_HEIGHT);
+        spDino->setScale(0.25);
+        spDino->setPosition(DINO_X,
+						    GROUND_HEIGHT - 4);
         spriteNode->addChild(spDino);
         this->addChild(spriteNode);
     }
-    //Dino  Animation
-    _animate = Animate::create(HelloWorld::createAnimation("dino_", 2, 0.4));
-    _animate->retain();
-    spDino->runAction(RepeatForever::create(_animate));
+    auto animate = Animate::create(HelloWorld::createAnimation("Idle", 10, 0.15));
+    animate->retain();
+    spDino->runAction(RepeatForever::create(animate));
+	
+	//Jump when touch animation
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::OnTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+	
 
-  	
-    //Game title
-    auto spGameTitle = Sprite::createWithSpriteFrameName("title.png");
-    if(spGameTitle == nullptr){
-        problemLoading("Sprite Game Title");
-    }
-    else{
-        spGameTitle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-        spGameTitle->setPosition(origin.x + visibleSize.width /2,
-                                 origin.y + visibleSize.height - TITLE_INITIAL_Y);
-        this->addChild(spGameTitle,2);
-    }
-
-    //Game over sprites
-    auto spGameOver = Sprite::createWithSpriteFrameName("gameover.png");
-    if(spGameOver == nullptr){
-        problemLoading("Sprite Game Over");
-    }
-    else{
-        spGameOver->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-        spGameOver->setPosition(origin.x + visibleSize.width/ 2,
-                                origin.y + visibleSize.height - TITLE_HIDDEN_Y);
-        this->addChild(spGameOver);
-    }
-
-    //Road 1 Sprite
+	//Road 1 Sprite
     auto spRoad_1 = Sprite::createWithSpriteFrameName("road_1.png");
     if(spRoad_1 == nullptr){
         problemLoading("Sprite Road 1");
@@ -98,25 +89,84 @@ bool HelloWorld::init(){
         this->addChild(spRoad_2);
     }
     
+   //Game title
+   auto spGameTitle = Sprite::createWithSpriteFrameName("title.png");
+   if(spGameTitle == nullptr){
+       problemLoading("Sprite Game Title");
+   }
+      
+   else{
+       spGameTitle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spGameTitle->setPosition(origin.x + visibleSize.width/ 2,
+                                origin.y + visibleSize.height);
+       this->addChild(spGameTitle,2);
+   }
+   
+   //Game over sprites
+   auto spGameOver = Sprite::createWithSpriteFrameName("gameover.png");
+   if(spGameOver == nullptr){
+       problemLoading("Sprite Game Over");
+   }
+   else{
+       spGameOver->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spGameOver->setPosition(origin.x + visibleSize.width/ 2,
+                               origin.y + visibleSize.height - TITLE_HIDDEN_Y);
+      // this->addChild(spGameOver);
+   }
    
     return true;
 }
 
+//Touch Event
+bool HelloWorld::OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
+    _animation->release();
+    _animation = HelloWorld::createAnimation("Jump", 12, 0.15);
+    auto animate = Animate::create(_animation);
+    animate->retain();
+    auto seq = Sequence::create(animate,CCCallFunc::create(CC_CALLBACK_0(HelloWorld::Move, this)), NULL);
+    spDino->runAction(seq);
+	return true;
+}
+
+void HelloWorld::Move(){
+    _animation->release();
+    _animation = HelloWorld::createAnimation("Run", 12, 0.15);
+    auto animate = Animate::create(_animation);
+    animate->retain();
+    spDino->runAction(RepeatForever::create(animate));
+}
+
+
 /*
-* Animation
+* Animation functions
 */
-cocos2d::Animation* HelloWorld::createAnimation(std::string prefixName, int pFrameOrder, float delayTime){
+cocos2d::Animation* HelloWorld::createAnimation(std::string prefixName, int pFrameOrder, float delayTime) {
     Vector<SpriteFrame*> animFrames;
     for (int i = 1; i <= pFrameOrder; i++) {
         char buffer[20] = { 0 };
-        sprintf(buffer, "%d.png", i);
+        sprintf(buffer, " (%d).png", i);
         std::string imgName = prefixName + buffer;
         auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imgName);
         animFrames.pushBack(frame);
-	}
-   Animation* animation = Animation::createWithSpriteFrames(animFrames, delayTime);
-   return animation;
+    }
+    _animation = Animation::createWithSpriteFrames(animFrames, delayTime);
+    return _animation;
+    //khoapham.vn
 }
+
+cocos2d::Vector<SpriteFrame*> HelloWorld::getAnimation(const char* format, int count) {
+    auto spriteCache = SpriteFrameCache::getInstance();
+    Vector<SpriteFrame*> animFrames;
+    char str[100];
+    for (int i = 1; i <= count; i++) {
+        sprintf(str, format, i);
+        animFrames.pushBack(spriteCache->getSpriteFrameByName(str));
+    }
+    return animFrames;
+    //codeandweb.com
+}
+
+
 
 void HelloWorld::menuCloseCallback(Ref* pSender){
     Director::getInstance()->end();

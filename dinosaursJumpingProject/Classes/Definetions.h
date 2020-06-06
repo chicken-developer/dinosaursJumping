@@ -7,7 +7,7 @@
 #define DINO_SPEED_Y_MAX 400.0f
 #define DINO_SPEED_X_INITIAL 300.0f
 #define DINO_SPEED_X_INCREASING_RATE 5
-#define DINO_X 60.0f
+#define DINO_X 120.0f
 
 //Cactus
 #define CACTUS_NUMBER 5
