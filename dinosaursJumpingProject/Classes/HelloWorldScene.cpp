@@ -21,50 +21,34 @@ bool HelloWorld::init(){
     }
     //Auto Layout
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    auto director = Director::getInstance();
-    auto glview = director->getOpenGLView();
-    float deviceHeight = MAX(glview->getFrameSize().height, glview->getFrameSize().width);
-    float deviceWidth = MIN(glview->getFrameSize().height, glview->getFrameSize().width);
-    deviceHeight = deviceHeight / deviceWidth * 600;
-    deviceWidth = 600;
-	
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();	
     SpriteBatchNode* spriteNode = SpriteBatchNode::create("Textures.png");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Textures.plist");
-    //Dinosaurs animation
-	// Create by tutorial at codeandweb //
+
+	//Dinosaurs animation
     Vector<SpriteFrame*> frames = getAnimation("Idle (%d).png", 10);
-    auto dinoSprite = Sprite::createWithSpriteFrame(frames.front());
+    dinoSprite = Sprite::createWithSpriteFrame(frames.front());
     dinoSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
     dinoSprite->setScale(0.25);
-    dinoSprite->setPosition(DINO_X + 200,
-        GROUND_HEIGHT - 4);
+    dinoSprite->setPosition(DINO_X,
+							GROUND_HEIGHT - 4);
     this->addChild(dinoSprite);
-    auto animation = Animation::createWithSpriteFrames(frames, 1.0f / 10);
-    dinoSprite->runAction(RepeatForever::create(Animate::create(animation)));
+    idleAnim = Animation::createWithSpriteFrames(frames, 1.0f / 10);
+    dinoSprite->runAction(RepeatForever::create(Animate::create(idleAnim)));
 
-	//Create by tutorial at khoapham.vn //
-    spDino = Sprite::createWithSpriteFrameName("Idle (1).png");
-    if (spDino == nullptr) {
-        problemLoading("Sprite Dino");
-    }
-    else {
-        spDino->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
-        spDino->setScale(0.25);
-        spDino->setPosition(DINO_X,
-						    GROUND_HEIGHT - 4);
-        spriteNode->addChild(spDino);
-        this->addChild(spriteNode);
-    }
-    auto animate = Animate::create(HelloWorld::createAnimation("Idle", 10, 0.15));
-    animate->retain();
-    spDino->runAction(RepeatForever::create(animate));
+    Vector<SpriteFrame*> handFrames = getAnimation("hand_%d.png", 2);
+    handSprite = Sprite::createWithSpriteFrame(handFrames.front());
+    handSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
+	handSprite->setPosition(origin.x + visibleSize.width/2,
+        GROUND_HEIGHT + 10);
+    this->addChild(handSprite);
+    auto handAnim = Animation::createWithSpriteFrames(handFrames, 1.0f / 2);
+    handSprite->runAction(RepeatForever::create(Animate::create(handAnim)));
 	
 	//Jump when touch animation
     auto touchListener = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::OnTouchBegan, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
-	
 
 	//Road 1 Sprite
     auto spRoad_1 = Sprite::createWithSpriteFrameName("road_1.png");
@@ -90,16 +74,31 @@ bool HelloWorld::init(){
     }
     
    //Game title
-   auto spGameTitle = Sprite::createWithSpriteFrameName("title.png");
+    spGameTitle = Sprite::createWithSpriteFrameName("title.png");
    if(spGameTitle == nullptr){
        problemLoading("Sprite Game Title");
    }
       
    else{
        spGameTitle->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spGameTitle->setScale(0.5);
        spGameTitle->setPosition(origin.x + visibleSize.width/ 2,
-                                origin.y + visibleSize.height);
+                                origin.y + visibleSize.height - 70);
        this->addChild(spGameTitle,2);
+   }
+
+	//Game Logo
+    spGameLogo = Sprite::createWithSpriteFrameName("logo-vtca-xanh-duong.png");
+   if (spGameLogo == nullptr) {
+       problemLoading("Sprite Game Logo");
+   }
+
+   else {
+       spGameLogo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spGameLogo->setScale(0.5);
+       spGameLogo->setPosition(origin.x + visibleSize.width / 2,
+           origin.y + visibleSize.height);
+       this->addChild(spGameLogo, 2);
    }
    
    //Game over sprites
@@ -113,46 +112,108 @@ bool HelloWorld::init(){
                                origin.y + visibleSize.height - TITLE_HIDDEN_Y);
       // this->addChild(spGameOver);
    }
-   
+	//Score Icon
+   auto spScoreIcon = Sprite::createWithSpriteFrameName("scoreicon.png");
+   if (spScoreIcon == nullptr) {
+       problemLoading("Sprite Score Icon");
+   }
+   else {
+       spScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spScoreIcon->setScale(1.5);
+       spScoreIcon->setPosition(origin.x + visibleSize.width - 10,
+           origin.y + visibleSize.height - 10);
+       this->addChild(spScoreIcon);
+   }
+
+	//Score Label
+        //Label High Score
+   auto labelScore = Label::createWithTTF("00", "fonts/score.ttf", 30, Size::ZERO);
+   if (labelScore == nullptr) {
+       problemLoading("Label High Score");
+   }
+   else {
+       labelScore->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+       labelScore->setPosition(origin.x + visibleSize.width - 80,
+           origin.y + visibleSize.height - 10);
+       this->addChild(labelScore);
+   }
+
+	//HighScore Icon
+   auto spHighScoreIcon = Sprite::createWithSpriteFrameName("highscoreicon.png");
+   if (spHighScoreIcon == nullptr) {
+       problemLoading("Sprite High Score");
+   }
+   else {
+       spHighScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spHighScoreIcon->setScale(1.5);
+       spHighScoreIcon->setPosition(origin.x + 35,
+           origin.y + visibleSize.height - 10);
+        this->addChild(spHighScoreIcon);
+   }
+	//Label High Score
+   auto labelHighScore = Label::createWithTTF("120", "fonts/score.ttf", 30, Size::ZERO);
+	if (labelHighScore == nullptr) {
+       problemLoading("Label High Score");
+   }
+   else {
+        labelHighScore->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+        labelHighScore->setPosition(origin.x + 10,
+           origin.y + visibleSize.height - 50);
+        this->addChild(labelHighScore);
+   }
+	//taptojump label
+    tapToJump = Label::createWithTTF("TAP TO JUMP", "fonts/score.ttf", 50, Size::ZERO);
+    if (tapToJump == nullptr) {
+        problemLoading("Label Tap To Jump");
+    }
+    else {
+        tapToJump->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+        tapToJump->setPosition(origin.x + visibleSize.width / 2,
+            GROUND_HEIGHT + 80);
+        this->addChild(tapToJump);
+    }
+	
     return true;
 }
 
 //Touch Event
 bool HelloWorld::OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
-    _animation->release();
-    _animation = HelloWorld::createAnimation("Jump", 12, 0.15);
-    auto animate = Animate::create(_animation);
-    animate->retain();
-    auto seq = Sequence::create(animate,CCCallFunc::create(CC_CALLBACK_0(HelloWorld::Move, this)), NULL);
-    spDino->runAction(seq);
-	return true;
+    changeAnimation(HelloWorld::Run());
+    removeChild(handSprite);
+    removeChild(tapToJump);
+    removeChild(spGameTitle);
+    removeChild(spGameLogo);
+  	return true;
 }
 
-void HelloWorld::Move(){
-    _animation->release();
-    _animation = HelloWorld::createAnimation("Run", 12, 0.15);
-    auto animate = Animate::create(_animation);
-    animate->retain();
-    spDino->runAction(RepeatForever::create(animate));
+void HelloWorld::changeAnimation(Animate* newAnimate){
+    dinoSprite->stopAllActions();
+    newAnimate->retain();
+    dinoSprite->runAction(RepeatForever::create(newAnimate));
 }
 
 
-/*
-* Animation functions
-*/
-cocos2d::Animation* HelloWorld::createAnimation(std::string prefixName, int pFrameOrder, float delayTime) {
-    Vector<SpriteFrame*> animFrames;
-    for (int i = 1; i <= pFrameOrder; i++) {
-        char buffer[20] = { 0 };
-        sprintf(buffer, " (%d).png", i);
-        std::string imgName = prefixName + buffer;
-        auto frame = SpriteFrameCache::getInstance()->getSpriteFrameByName(imgName);
-        animFrames.pushBack(frame);
-    }
-    _animation = Animation::createWithSpriteFrames(animFrames, delayTime);
-    return _animation;
-    //khoapham.vn
+cocos2d::Animate* HelloWorld::Idle(){
+    Vector<SpriteFrame*> frames = getAnimation("Idle (%d).png", 10);
+    idleAnim = Animation::createWithSpriteFrames(frames, 1.0f / 10);
+    auto animate = Animate::create(idleAnim);
+    return animate;
+   }
+
+cocos2d::Animate* HelloWorld::Jump(){
+    Vector<SpriteFrame*> frames = getAnimation("Jump (%d).png", 12);
+    jumpAnim = Animation::createWithSpriteFrames(frames, 1.0f / 12);
+    auto animate = Animate::create(jumpAnim);
+    return animate;
+   }
+
+cocos2d::Animate* HelloWorld::Run(){
+    Vector<SpriteFrame*> frames = getAnimation("Run (%d).png", 8);
+    runAnim = Animation::createWithSpriteFrames(frames, 1.0f / 8);
+	auto animate = Animate::create(runAnim);
+    return animate;
 }
+
 
 cocos2d::Vector<SpriteFrame*> HelloWorld::getAnimation(const char* format, int count) {
     auto spriteCache = SpriteFrameCache::getInstance();
@@ -163,9 +224,13 @@ cocos2d::Vector<SpriteFrame*> HelloWorld::getAnimation(const char* format, int c
         animFrames.pushBack(spriteCache->getSpriteFrameByName(str));
     }
     return animFrames;
-    //codeandweb.com
 }
 
+bool HelloWorld::update(){
+
+
+	return true;
+}
 
 
 void HelloWorld::menuCloseCallback(Ref* pSender){
