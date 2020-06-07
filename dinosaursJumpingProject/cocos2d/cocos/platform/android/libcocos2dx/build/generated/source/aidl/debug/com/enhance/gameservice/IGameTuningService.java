@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: D:\\GameProject\\dinosaursJumping\\dinosaursJumpingProject\\cocos2d\\cocos\\platform\\android\\java\\src\\com\\enhance\\gameservice\\IGameTuningService.aidl
+ * Original file: /Users/imac_vtca/Documents/quynh_gd18/projects/dinosaursJumping/dinosaursJumpingProject/cocos2d/cocos/platform/android/java/src/com/enhance/gameservice/IGameTuningService.aidl
  */
 package com.enhance.gameservice;
 public interface IGameTuningService extends android.os.IInterface

@@ -3,6 +3,7 @@
 #include "HelloWorldScene.h"
 #include "SimpleAudioEngine.h"
 #include "Definetions.h"
+
 USING_NS_CC;
 
 Scene* HelloWorld::createScene(){
@@ -30,8 +31,8 @@ bool HelloWorld::init(){
     dinoSprite = Sprite::createWithSpriteFrame(frames.front());
     dinoSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
     dinoSprite->setScale(0.25);
-    dinoSprite->setPosition(DINO_X,
-							GROUND_HEIGHT - 4);
+    dinoSprite->setPosition(origin.x + DINO_X,
+							origin.y + GROUND_HEIGHT - 8);
     this->addChild(dinoSprite);
     idleAnim = Animation::createWithSpriteFrames(frames, 1.0f / 10);
     dinoSprite->runAction(RepeatForever::create(Animate::create(idleAnim)));
@@ -40,7 +41,7 @@ bool HelloWorld::init(){
     handSprite = Sprite::createWithSpriteFrame(handFrames.front());
     handSprite->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
 	handSprite->setPosition(origin.x + visibleSize.width/2,
-        GROUND_HEIGHT + 10);
+                            origin.y + GROUND_HEIGHT + 10);
     this->addChild(handSprite);
     auto handAnim = Animation::createWithSpriteFrames(handFrames, 1.0f / 2);
     handSprite->runAction(RepeatForever::create(Animate::create(handAnim)));
@@ -97,7 +98,7 @@ bool HelloWorld::init(){
        spGameLogo->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
        spGameLogo->setScale(0.5);
        spGameLogo->setPosition(origin.x + visibleSize.width / 2,
-           origin.y + visibleSize.height);
+                               origin.y + visibleSize.height);
        this->addChild(spGameLogo, 2);
    }
    
@@ -118,10 +119,10 @@ bool HelloWorld::init(){
        problemLoading("Sprite Score Icon");
    }
    else {
-       spScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
+       spScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
        spScoreIcon->setScale(1.5);
        spScoreIcon->setPosition(origin.x + visibleSize.width - 10,
-           origin.y + visibleSize.height - 10);
+                                origin.y + visibleSize.height - 10);
        this->addChild(spScoreIcon);
    }
 
@@ -132,9 +133,9 @@ bool HelloWorld::init(){
        problemLoading("Label High Score");
    }
    else {
-       labelScore->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+       labelScore->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
        labelScore->setPosition(origin.x + visibleSize.width - 80,
-           origin.y + visibleSize.height - 10);
+                               origin.y + visibleSize.height - 10);
        this->addChild(labelScore);
    }
 
@@ -158,7 +159,7 @@ bool HelloWorld::init(){
    else {
         labelHighScore->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
         labelHighScore->setPosition(origin.x + 10,
-           origin.y + visibleSize.height - 50);
+                                    origin.y + visibleSize.height - 50);
         this->addChild(labelHighScore);
    }
 	//taptojump label
@@ -169,16 +170,54 @@ bool HelloWorld::init(){
     else {
         tapToJump->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
         tapToJump->setPosition(origin.x + visibleSize.width / 2,
-            GROUND_HEIGHT + 80);
+                               origin.y + GROUND_HEIGHT + 80);
         this->addChild(tapToJump);
     }
-	
-    return true;
+
+
+    backgroundElements = InfiniteParallaxNode::create();
+
+   //Add rock
+    // unsigned int cactusQuantity = 7;
+    // for(unsigned int i = 0; i < cactusQuantity; i++){
+    //     auto rock = Sprite::createWithSpriteFrameName("cactus_1.png");
+    //     rock->setAnchorPoint(Point::ZERO);
+    //     rock->setScale(randomValueBetween(0.6, 0.75));
+    //     backgroundElements->addChild(rock,
+	// 		randomValueBetween(-10, -6),
+	// 		Point(0.95, 1.0),
+	// 		Point(
+	// 		(visibleSize.width / 5) * (i + 1) + randomValueBetween(0, 100),
+	// 		ground->getContentSize().height - 5));
+    // }
+    // //Add tree
+    unsigned int treesQuantity = 10;
+    for(unsigned int i = 0; i < treesQuantity; i++){
+        auto tree = Sprite::createWithSpriteFrameName("cactus_3.png");
+        tree->setAnchorPoint(Point::ZERO);
+       // tree->setScale(randomValueBetween (0.5, 0.75));
+        backgroundElements->addChild(
+			tree,
+			-4,
+			Point(0.5, 1),
+			Point(visibleSize.width / (treesQuantity - 5) * (i + 1) + 30,
+			55));
+    }
+     addChild(backgroundElements, 2);
+	 schedule(schedule_selector(HelloWorld::update), 0.01);
+
+
+   return true;
 }
 
+void HelloWorld::update(float deltaTime){
+   Point scrollDecrement = Point(5, 0); 
+	backgroundElements->setPosition(backgroundElements->getPosition() - scrollDecrement);
+	backgroundElements->updatePosition();
+}
 //Touch Event
 bool HelloWorld::OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
-    changeAnimation(HelloWorld::Run());
+    changeAnimation(HelloWorld::Jump());
     removeChild(handSprite);
     removeChild(tapToJump);
     removeChild(spGameTitle);
@@ -189,9 +228,15 @@ bool HelloWorld::OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
 void HelloWorld::changeAnimation(Animate* newAnimate){
     dinoSprite->stopAllActions();
     newAnimate->retain();
-    dinoSprite->runAction(RepeatForever::create(newAnimate));
+    dinoSprite->runAction(newAnimate);
+    dinoSprite->runAction(RepeatForever::create(Animate::create(idleAnim)));
+ 
 }
-
+// void HelloWorld::changeAnimation(Animate* newAnimate){
+//     dinoSprite->stopAllActions();
+//     newAnimate->retain();
+//     dinoSprite->runAction(RepeatForever::create(newAnimate));
+// }
 
 cocos2d::Animate* HelloWorld::Idle(){
     Vector<SpriteFrame*> frames = getAnimation("Idle (%d).png", 10);
@@ -226,12 +271,9 @@ cocos2d::Vector<SpriteFrame*> HelloWorld::getAnimation(const char* format, int c
     return animFrames;
 }
 
-bool HelloWorld::update(){
-
-
-	return true;
+float HelloWorld::randomValueBetween(float low, float high){
+	return (((float)rand() / RAND_MAX) * (high - low)) + low;
 }
-
 
 void HelloWorld::menuCloseCallback(Ref* pSender){
     Director::getInstance()->end();
