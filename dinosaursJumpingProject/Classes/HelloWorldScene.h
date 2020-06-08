@@ -8,6 +8,10 @@ class HelloWorld : public cocos2d::Scene
 public:
     static cocos2d::Scene* createScene();
 
+    void changeAnimation(cocos2d::Animate* newAnimate);
+    cocos2d::Vector<cocos2d::SpriteFrame*> getAnimation(const char* format, int count);
+    float randomValueBetween(float num1, float num2);
+	
     virtual bool init();
     void update(float deltaTime);
     // a selector callback
@@ -18,6 +22,8 @@ public:
 private:
    InfiniteParallaxNode* backgroundElements;
    cocos2d::Sprite* dinoSprite;
+
+	
    cocos2d::Sprite* handSprite;
    cocos2d::Sprite* spGameLogo;
    cocos2d::Sprite* spGameTitle;
@@ -31,10 +37,7 @@ private:
    cocos2d::Animate* Idle();
    cocos2d::Animate* Run();
    cocos2d::Animate* Jump();
-	
-   void changeAnimation(cocos2d::Animate* newAnimate);
-   cocos2d::Vector<cocos2d::SpriteFrame*> getAnimation(const char* format, int count);
-   float randomValueBetween(float num1, float num2);
+
 };
 
 #endif // __HELLOWORLD_SCENE_H__

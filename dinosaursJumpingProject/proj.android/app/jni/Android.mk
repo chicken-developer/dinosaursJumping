@@ -8,6 +8,9 @@ LOCAL_MODULE_FILENAME := libMyGame
 
 LOCAL_SRC_FILES := $(LOCAL_PATH)/hellocpp/main.cpp \
                    $(LOCAL_PATH)/../../../Classes/AppDelegate.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Character.cpp \
+                   $(LOCAL_PATH)/../../../Classes/Sprites.cpp \        
+                   $(LOCAL_PATH)/../../../Classes/Helper.cpp \
                    $(LOCAL_PATH)/../../../Classes/InfiniteParallaxNode.cpp\
                    $(LOCAL_PATH)/../../../Classes/HelloWorldScene.cpp
 

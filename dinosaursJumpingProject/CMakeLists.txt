@@ -51,11 +51,16 @@ list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
      Classes/InfiniteParallaxNode.cpp
+     Classes/Sprites.cpp
+     Classes/Character.cpp
+     Classes/Helper.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
      Classes/InfiniteParallaxNode.h
+     Classes/Sprites.h
+     Classes/Character.h
      )
 
 if(ANDROID)
