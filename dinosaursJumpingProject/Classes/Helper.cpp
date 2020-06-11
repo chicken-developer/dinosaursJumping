@@ -1,16 +1,21 @@
-#include  "cocos2d.h"
-USING_NS_CC;
+#include "Helper.h"
 
-auto visibleSize = Director::getInstance()->getVisibleSize();
-Vec2 origin = Director::getInstance()->getVisibleOrigin();
+Helper* Helper::_instance = nullptr;
 
-Vector<SpriteFrame*> getAnimation(const char* format, int count) {
-	auto spriteCache = SpriteFrameCache::getInstance();
-	Vector<SpriteFrame*> animFrames;
-	char str[100];
-	for (int i = 1; i <= count; i++) {
-		sprintf(str, format, i);
-		animFrames.pushBack(spriteCache->getSpriteFrameByName(str));
+Helper* Helper::getHelpFuncs(){
+	if(_instance == nullptr){
+		_instance = new Helper();
 	}
-	return animFrames;
+	return _instance;
 }
+
+Size Helper::getVisibleSize(){
+	visibleSize = Director::getInstance()->getVisibleSize();
+	return visibleSize;
+}
+
+Vec2 Helper::getOrigin() {
+	origin = Director::getInstance()->getVisibleOrigin();
+	return origin;
+}
+

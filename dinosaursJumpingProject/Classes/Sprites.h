@@ -1,10 +1,9 @@
 #pragma once
 #include "cocos2d.h"
 USING_NS_CC;
-#pragma once
 
 class Sprites{
-public:
+private:
 	static Sprites* _instance;
 	Sprite* spHand;
 	Sprite* spLogoVTC;
@@ -19,6 +18,8 @@ public:
 	Label* lbHighScore;
 	Label* lbTapToJump;
 
+	Vector<SpriteFrame*> getAnimation(const char* format, int count);
+public:
 	void addHand(Scene* scene);
 	void addLogoVTC(Scene* scene);
 	void addTitleStart(Scene* scene);
@@ -31,7 +32,6 @@ public:
 	void addHighScoreIcon(Scene* scene);
 	void addHighScorelabel(Scene* scene);
 	void addTapToJumpLabel(Scene* scene);
-
-public:
 	static Sprites* getSprite();
+
 };

@@ -7,6 +7,8 @@ public:
 	static Character* _Character; 
 	Sprite* spDino;
 	void addDino(Scene* scene);
+	Vector<SpriteFrame*> getAnimation(const char* format, int count);
+	PhysicsBody* dinoPhysicBody = PhysicsBody::createBox(Size(1200, 500));
 	void changeAnimate(Animate* newAnimate);
 	cocos2d::Animation* idleAnim;
 	cocos2d::Animation* jumpAnim;
@@ -18,5 +20,5 @@ public:
 
 public:
 	static Character* myCharacter();
-
+	
 };

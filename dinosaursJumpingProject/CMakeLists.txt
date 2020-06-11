@@ -54,6 +54,10 @@ list(APPEND GAME_SOURCE
      Classes/Sprites.cpp
      Classes/Character.cpp
      Classes/Helper.cpp
+     Classes/Player.cpp
+     Classes/SceneManager.cpp
+     Classes/CObject.cpp
+     Classes/CScene.cpp
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
@@ -61,6 +65,11 @@ list(APPEND GAME_HEADER
      Classes/InfiniteParallaxNode.h
      Classes/Sprites.h
      Classes/Character.h
+     Classes/Helper.h
+      Classes/Player.h
+     Classes/SceneManager.h
+     Classes/CObject.h
+     Classes/CScene.h
      )
 
 if(ANDROID)

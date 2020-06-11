@@ -152,8 +152,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\Character.cpp" />
+    <ClCompile Include="..\Classes\CObject.cpp" />
+    <ClCompile Include="..\Classes\CScene.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\InfiniteParallaxNode.cpp" />
+    <ClCompile Include="..\Classes\Player.cpp" />
+    <ClCompile Include="..\Classes\SceneManager.cpp" />
     <ClCompile Include="..\Classes\Sprites.cpp" />
     <ClCompile Include="..\Classes\TempCode.cpp" />
     <ClCompile Include="main.cpp" />
@@ -161,9 +165,14 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)\Resources\" /D /E /I /F /Y
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\Character.h" />
+    <ClInclude Include="..\Classes\CObject.h" />
+    <ClInclude Include="..\Classes\CScene.h" />
     <ClInclude Include="..\Classes\Definetions.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\Helper.h" />
     <ClInclude Include="..\Classes\InfiniteParallaxNode.h" />
+    <ClInclude Include="..\Classes\Player.h" />
+    <ClInclude Include="..\Classes\SceneManager.h" />
     <ClInclude Include="..\Classes\Sprites.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

@@ -1,13 +1,35 @@
-#include  "Helper.cpp"
+#include  "Helper.h"
 #include "HelloWorldScene.h"
 #include  "Sprites.h"
 #include "Character.h"
+#include "Definetions.h"
 
 USING_NS_CC;
 
 Scene* HelloWorld::createScene(){
-    return HelloWorld::create();
+    auto scene = Scene::createWithPhysics();
+   	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    Vect gravity(0.0f, -90.0f);
+    scene->getPhysicsWorld()->setGravity(gravity);
+    auto layer = HelloWorld::create();
+    layer->setPhysicWorld(scene->getPhysicsWorld());
+    scene->addChild(layer);
+    return scene;
 }
+
+
+void HelloWorld::addPhysicWall() {
+    auto bodyWall = PhysicsBody::createEdgeBox(Size((Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width),
+												    (Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - GROUND_HEIGHT)),
+										       PHYSICSBODY_MATERIAL_DEFAULT,3);
+    auto wallNode = Node::create();
+    wallNode->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
+    wallNode->setPosition(Vec2(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width,
+						       Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height));
+    wallNode->setPhysicsBody(bodyWall);
+    this->addChild(wallNode);
+}
+
 
 bool HelloWorld::init(){
    
@@ -15,7 +37,7 @@ bool HelloWorld::init(){
         return false;
     }
 
-	
+    addPhysicWall();
     SpriteBatchNode* spriteNode = SpriteBatchNode::create("Textures.png");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("Textures.plist");
 
@@ -29,47 +51,49 @@ bool HelloWorld::init(){
     Sprites::getSprite()->addRoad_01(this);
     Sprites::getSprite()->addRoad_02(this);
     Sprites::getSprite()->addTitleStart(this);
-    Sprites::getSprite()->addTitleGG(this);
+  //  Sprites::getSprite()->addTitleGG(this);
     Sprites::getSprite()->addTapToJumpLabel(this);
 
     Character::myCharacter()->addDino(this);
 	
-    auto touchListener = EventListenerTouchOneByOne::create();
-    touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::OnTouchBegan, this);
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+    
 
-    backgroundElements = InfiniteParallaxNode::create();
-    unsigned int treesQuantity = 10;
-    for(unsigned int i = 0; i < treesQuantity; i++){
-        auto tree = Sprite::createWithSpriteFrameName("cactus_3.png");
-        tree->setAnchorPoint(Point::ZERO);
-       // tree->setScale(randomValueBetween (0.5, 0.75));
-        backgroundElements->addChild(
-			tree,
-			-4,
-			Point(0.5, 1),
-			Point(visibleSize.width / (treesQuantity - 5) * (i + 1) + 30,
-			55));
-    }
-     addChild(backgroundElements, 2);
-	 schedule(schedule_selector(HelloWorld::update), 0.01);
-	
+	// //Parallax for catus
+ //    backgroundElements = InfiniteParallaxNode::create();
+ //    unsigned int cactusQuantity = 10;
+ //    for(unsigned int i = 0; i < cactusQuantity; i++){
+ //        int randomInt =(int)randomValueBetween(2, 3.5);
+ //        auto cactus = Sprite::createWithSpriteFrameName("cactus_" + std::to_string(randomInt) + ".png");
+ //        cactus->setAnchorPoint(Point::ZERO);
+ //        cactus->setScale(randomValueBetween (1.5, 2.5));
+ //        backgroundElements->addChild(
+ //                cactus,
+ //                0,
+ //                Point(0.3, 0.5),
+ //                Point(Helper::getHelpFuncs()->getVisibleSize().width,
+	// 							 GROUND_HEIGHT));
+ //       
+ //    }
+ //     addChild(backgroundElements, 0);
+	//  schedule(schedule_selector(HelloWorld::update), 0.01);
 
 	return true;
 }
 
 void HelloWorld::update(float deltaTime){
-   Point scrollDecrement = Point(5, 0); 
-	backgroundElements->setPosition(backgroundElements->getPosition() - scrollDecrement);
-	backgroundElements->updatePosition();
+    auto touchListener = EventListenerTouchOneByOne::create();
+    touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::OnTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
+	
+	// Point scrollDecrement = Point(6, 0); 
+	// backgroundElements->setPosition(backgroundElements->getPosition() - scrollDecrement);
+	// backgroundElements->updatePosition();
+    //if (backgroundElements->getPosition().x < Helper::getHelpFuncs()->getVisibleSize().width/ 2) removeChild(backgroundElements);
 }
+
 //Touch Event
 bool HelloWorld::OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
-    Character::myCharacter()->changeAnimate(Character::myCharacter()->Jump());
-    removeChild(Sprites::getSprite()->lbTapToJump);
-   // removeChild(tapToJump);
-  //  removeChild(spGameTitle);
-  //  removeChild(spGameLogo);
+    Character::myCharacter()->changeAnimate(Character::myCharacter()->Run());
   	return true;
 }
 

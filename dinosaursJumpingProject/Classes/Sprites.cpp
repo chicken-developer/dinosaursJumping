@@ -1,8 +1,7 @@
 #include "Sprites.h"
 #include "Definetions.h"
-#include "Helper.cpp"
-
-Sprites* Sprites::_instance = NULL;
+#include "Helper.h"
+Sprites* Sprites::_instance = nullptr;
 
 Sprites* Sprites::getSprite() {
 	if (_instance == nullptr) {
@@ -11,6 +10,16 @@ Sprites* Sprites::getSprite() {
 	return _instance;
 }
 
+Vector<SpriteFrame*> Sprites::getAnimation(const char* format, int count) {
+	auto spritecache = SpriteFrameCache::getInstance();
+	Vector<SpriteFrame*> animFrames;
+	char str[100];
+	for (int i = 1; i <= count; i++) {
+		sprintf(str, format, i);
+		animFrames.pushBack(spritecache->getSpriteFrameByName(str));
+	}
+	return animFrames;
+}
 
 static void problemLoading(const char* filename) {
 	printf("Error while loading: %s\n", filename);
@@ -22,8 +31,8 @@ void Sprites::addHand(Scene* scene){
 	Vector<SpriteFrame*> handFrames = getAnimation("hand_%d.png", 2);
 	spHand = Sprite::createWithSpriteFrame(handFrames.front());
 	spHand->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
-	spHand->setPosition(origin.x + visibleSize.width / 2,
-		origin.y + GROUND_HEIGHT + 10);
+	spHand->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2 + 20,
+						Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 10);
 	scene->addChild(spHand);
 	auto handAnim = Animation::createWithSpriteFrames(handFrames, 1.0f / 2);
 	spHand->runAction(RepeatForever::create(Animate::create(handAnim)));
@@ -38,8 +47,8 @@ void Sprites::addLogoVTC(Scene* scene){
 	else {
 		spLogoVTC->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 		spLogoVTC->setScale(0.5);
-		spLogoVTC->setPosition(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height);
+		spLogoVTC->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
+					   		   Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height);
 		scene->addChild(spLogoVTC, 2);
 	}
 
@@ -53,9 +62,9 @@ void Sprites::addTitleStart(Scene* scene){
 
 	else {
 		spTitleStart->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-		spTitleStart->setScale(0.5);
-		spTitleStart->setPosition(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - 70);
+	//	spTitleStart->setScale(0.5);
+		spTitleStart->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
+							   	  Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 70);
 		scene->addChild(spTitleStart, 2);
 	}
 }
@@ -84,7 +93,7 @@ void Sprites::addRoad_02(Scene* scene){
 	else {
 		spRoad_02->setAnchorPoint(Vec2::ANCHOR_MIDDLE_LEFT);
 		spRoad_02->setPosition(spRoad_01->getPositionX() + spRoad_01->getContentSize().width - 5,
-			GROUND_HEIGHT);
+							   GROUND_HEIGHT);
 		scene->addChild(spRoad_02);
 	}
 }
@@ -96,8 +105,8 @@ void Sprites::addTitleGG(Scene* scene){
 	}
 	else {
 		spTitleGG->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-		spTitleGG->setPosition(origin.x + visibleSize.width / 2,
-			origin.y + visibleSize.height - TITLE_HIDDEN_Y);
+		spTitleGG->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
+							   Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - TITLE_HIDDEN_Y);
 		scene->addChild(spTitleGG);
 	}
 }
@@ -110,8 +119,8 @@ void Sprites::addScoreIcon(Scene* scene){
 	else {
 		spScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
 		spScoreIcon->setScale(1.5);
-		spScoreIcon->setPosition(origin.x + visibleSize.width - 10,
-			origin.y + visibleSize.height - 10);
+		spScoreIcon->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width - 10,
+								 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 10);
 		scene->addChild(spScoreIcon);
 	}
 
@@ -124,8 +133,8 @@ void Sprites::addScoreLabel(Scene* scene){
 	}
 	else {
 		lbScore->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
-		lbScore->setPosition(origin.x + visibleSize.width - 80,
-			origin.y + visibleSize.height - 10);
+		lbScore->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width - 50,
+							 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 10);
 		scene->addChild(lbScore);
 	}
 }
@@ -138,8 +147,8 @@ void Sprites::addHighScoreIcon(Scene* scene){
 	else {
 		spHighScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
 		spHighScoreIcon->setScale(1.5);
-		spHighScoreIcon->setPosition(origin.x + 35,
-			origin.y + visibleSize.height - 10);
+		spHighScoreIcon->setPosition(Helper::getHelpFuncs()->getOrigin().x + 35,
+									 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 10);
 		scene->addChild(spHighScoreIcon);
 	}
 }
@@ -151,8 +160,8 @@ void Sprites::addHighScorelabel(Scene* scene){
 	}
 	else {
 		lbHighScore->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
-		lbHighScore->setPosition(origin.x + 10,
-			origin.y + visibleSize.height - 50);
+		lbHighScore->setPosition(Helper::getHelpFuncs()->getOrigin().x + 10,
+								 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 50);
 		scene->addChild(lbHighScore);
 	}
 }
@@ -164,9 +173,8 @@ void Sprites::addTapToJumpLabel(Scene* scene){
 	}
 	else {
 		lbTapToJump->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-		lbTapToJump->setPosition(origin.x + visibleSize.width / 2,
-			origin.y + GROUND_HEIGHT + 80);
+		lbTapToJump->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
+								 Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 80);
 		scene->addChild(lbTapToJump);
 	}
-
 }
