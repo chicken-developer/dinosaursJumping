@@ -69,75 +69,95 @@ void Sprites::addTitleStart(Scene* scene){
 	}
 }
 
-void Sprites::addCactus1(Scene* scene) {
+void Sprites::addCactusToVector() {
+
 	spCactus_01 = Sprite::createWithSpriteFrameName("cactus_1.png");
 	if (spCactus_01 == nullptr) {
 		problemLoading("Sprite Cactus 1");
 	}
-
 	else {
 		spCactus_01->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_01->setScale(1.2);
 		spCactus_01->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
-		scene->addChild(spCactus_01);
+		auto cactusBody = PhysicsBody::createBox(Size(spCactus_01->getContentSize()));
+		cactusBody->setDynamic(false);
+		cactusBody->setRotationEnable(false);
+		cactusBody->setContactTestBitmask(0x000001);
+		spCactus_01->setPhysicsBody(cactusBody);
+		spCactus_01->setTag(TYPE_CACTUS);
+		listCactus.pushBack(spCactus_01);
 	}
-}
 
-void Sprites::addCactus2(Scene* scene) {
 	spCactus_02 = Sprite::createWithSpriteFrameName("cactus_2.png");
 	if (spCactus_02 == nullptr) {
 		problemLoading("Sprite Cactus 2");
 	}
-
 	else {
 		spCactus_02->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_02->setScale(1.2);
-		spCactus_02->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
-		scene->addChild(spCactus_02);
+		spCactus_02->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 1010, GROUND_HEIGHT);
+		auto cactusBody = PhysicsBody::createBox(Size(spCactus_02->getContentSize()));
+		cactusBody->setContactTestBitmask(0x000001);
+		cactusBody->setDynamic(false);
+		cactusBody->setRotationEnable(false);
+		spCactus_02->setPhysicsBody(cactusBody);
+		spCactus_02->setTag(TYPE_CACTUS);
+		listCactus.pushBack(spCactus_02);
 	}
-}
 
-void Sprites::addCactus3(Scene* scene) {
 	spCactus_03 = Sprite::createWithSpriteFrameName("cactus_3.png");
 	if (spCactus_03 == nullptr) {
-		problemLoading("Sprite Cactus");
+		problemLoading("Sprite Cactus 3");
 	}
-
 	else {
 		spCactus_03->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_03->setScale(1.2);
-		spCactus_03->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10,GROUND_HEIGHT);
-		scene->addChild(spCactus_03);
+		spCactus_03->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 2010,GROUND_HEIGHT);
+		auto cactusBody = PhysicsBody::createBox(Size(spCactus_03->getContentSize()));
+		cactusBody->setContactTestBitmask(0x000001);
+		spCactus_03->setPhysicsBody(cactusBody);
+		cactusBody->setDynamic(false);
+		cactusBody->setRotationEnable(false);
+		spCactus_03->setTag(TYPE_CACTUS);
+		listCactus.pushBack(spCactus_03);
 	}
-}
 
-void Sprites::addCactus4(Scene* scene) {
 	spCactus_04 = Sprite::createWithSpriteFrameName("cactus_4.png");
 	if (spCactus_04 == nullptr) {
 		problemLoading("Sprite Cactus 4");
 	}
-
 	else {
 		spCactus_04->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_04->setScale(1.2);
-		spCactus_04->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
-		scene->addChild(spCactus_04);
+		spCactus_04->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 3010, GROUND_HEIGHT);
+		auto cactusBody = PhysicsBody::createBox(Size(spCactus_04->getContentSize()));
+		cactusBody->setContactTestBitmask(0x000001);
+		cactusBody->setDynamic(false);
+		cactusBody->setRotationEnable(false);
+		spCactus_04->setPhysicsBody(cactusBody);
+		spCactus_04->setTag(TYPE_CACTUS);
+		listCactus.pushBack(spCactus_04);
 	}
-}
 
-void Sprites::addCactus5(Scene* scene) {
 	spCactus_05 = Sprite::createWithSpriteFrameName("cactus_5.png");
 	if (spCactus_05 == nullptr) {
-		problemLoading("Sprite Cactus");
+		problemLoading("Sprite Cactus 5");
 	}
-
 	else {
 		spCactus_05->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_05->setScale(1.2);
-		spCactus_05->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
-		scene->addChild(spCactus_05);
+		spCactus_05->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 4010, GROUND_HEIGHT);
+		auto cactusBody = PhysicsBody::createBox(Size(spCactus_05->getContentSize()));
+		cactusBody->setContactTestBitmask(0x000001);
+		spCactus_05->setPhysicsBody(cactusBody);
+		cactusBody->setDynamic(false);
+		cactusBody->setRotationEnable(false);
+		spCactus_05->setTag(TYPE_CACTUS);
+		listCactus.pushBack(spCactus_05);
 	}
+
 }
+
 
 void Sprites::addGround(Scene* scene){
 	
@@ -248,3 +268,17 @@ void Sprites::addTapToJumpLabel(Scene* scene){
 		scene->addChild(lbTapToJump);
 	}
 }
+
+void Sprites::addReadyToRunLabel(Scene* scene){
+	lbReadyToRun = Label::createWithTTF("READY TO RUN", "fonts/score.ttf", 100, Size::ZERO);
+	if (lbReadyToRun == nullptr) {
+		problemLoading("Label ready to run");
+	}
+	else {
+		lbReadyToRun->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		lbReadyToRun->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
+								 Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 500);
+		scene->addChild(lbReadyToRun);
+	}
+}
+

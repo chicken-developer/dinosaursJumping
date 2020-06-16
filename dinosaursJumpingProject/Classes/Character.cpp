@@ -15,7 +15,7 @@ void Character::addDino(Scene* scene){
 	spDino = Sprite::createWithSpriteFrame(frames.front());
 	spDino->setAnchorPoint(Vec2::ANCHOR_BOTTOM_RIGHT);
 	spDino->setScale(0.25);
-	spDino->setPosition(Helper::getHelpFuncs()->getOrigin().x + DINO_X,
+	spDino->setPosition(Helper::getHelpFuncs()->getOrigin().x + DINO_X - 100,
 		Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 100);
 	dinoPhysicBody->setPositionOffset(Vec2(-50, 0));
 	dinoPhysicBody->setRotationEnable(false);
@@ -88,7 +88,7 @@ cocos2d::Animate* Character::Run() {
 
 cocos2d::Animate* Character::Jump() {
 	Vector<SpriteFrame*> frames = getAnimation("Jump (%d).png", 12);
-	jumpAnim = Animation::createWithSpriteFrames(frames, 1.45f / 12);
+	jumpAnim = Animation::createWithSpriteFrames(frames, 1.0f / 12);
 	auto animate = Animate::create(jumpAnim);
 	return animate;
 }

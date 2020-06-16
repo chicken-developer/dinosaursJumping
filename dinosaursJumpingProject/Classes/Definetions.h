@@ -3,6 +3,7 @@
 //Tag
 #define TYPE_WALL 1
 #define TYPE_DINO 2
+#define TYPE_CACTUS 3
 #define TRANSITION_SCENE_DURATION 2.0
 #define DEVICE_WIDTH 1080 
 #define DEVICE_HEIGHT 1920 

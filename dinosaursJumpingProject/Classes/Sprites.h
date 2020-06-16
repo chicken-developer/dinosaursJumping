@@ -19,20 +19,18 @@ public:
 	Sprite* spCactus_03;
 	Sprite* spCactus_04;
 	Sprite* spCactus_05;
+	Vector<Sprite*> listCactus;
 
 	Label* lbScore;
 	Sprite* spHighScoreIcon;
 	Label* lbHighScore;
 	Label* lbTapToJump;
+	Label* lbReadyToRun;
 
 	Vector<SpriteFrame*> getAnimation(const char* format, int count);
 public:
-	void addCactus1(Scene* scene);
-	void addCactus2(Scene* scene);
-	void addCactus3(Scene* scene);
-	void addCactus4(Scene* scene);
-	void addCactus5(Scene* scene);
-
+	void addCactusToVector();
+	
 
 	void addHand(Scene* scene);
 	void addLogoVTC(Scene* scene);
@@ -46,6 +44,7 @@ public:
 	void addHighScoreIcon(Scene* scene);
 	void addHighScorelabel(Scene* scene);
 	void addTapToJumpLabel(Scene* scene);
+	void addReadyToRunLabel(Scene* scene);
 	static Sprites* getInstance();
 
 };

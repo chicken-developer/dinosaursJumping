@@ -7,9 +7,9 @@ USING_NS_CC;
 
 Scene* HelloWorld::createScene(){
     auto scene = Scene::createWithPhysics();
-   	scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-    Vect gravity(0.0f, -200.0f);
+    Vect gravity(0.0f, -700.0f);
     scene->getPhysicsWorld()->setGravity(gravity);
+    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL); 
     auto layer = HelloWorld::create();
     layer->setPhysicWorld(scene->getPhysicsWorld());
     scene->addChild(layer);
@@ -45,14 +45,17 @@ bool HelloWorld::init() {
     Sprites::getInstance()->addScoreIcon(this);
     Sprites::getInstance()->addScoreLabel(this);
     Sprites::getInstance()->addLogoVTC(this);
-    Sprites::getInstance()->addCactus1(this);
     Sprites::getInstance()->addRoad_01(this);
     Sprites::getInstance()->addRoad_02(this);
     Sprites::getInstance()->addTitleStart(this);
     Sprites::getInstance()->addTitleGG(this);
     Sprites::getInstance()->addTapToJumpLabel(this);
     Character::getInstance()->addDino(this);
-
+    Sprites::getInstance()->addCactusToVector();
+        for(int i = 0; i < Sprites::getInstance()->listCactus.size(); i ++){
+            this->addChild(Sprites::getInstance()->listCactus.at(i));
+        }
+   
 	//Touch event for handle touch on screen
     auto* touchListener = EventListenerTouchOneByOne::create();
     touchListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
@@ -71,57 +74,94 @@ bool HelloWorld::init() {
 }
 
 void HelloWorld::update(float deltaTime){
+    //Handle Dino speed & animation
     timeToRun -= deltaTime;
-    if (timeToRun < 0) timeToRun = 0;
+    if (timeToRun < 0){
+        timeToRun = 0;  
+        gameSpeed = 250;
+    } 
+        for(int i = 0; i < Sprites::getInstance()->listCactus.size(); i ++){
+          // if(Sprites::getInstance()->listCactus.at(i)->getPosition().x >= Helper::getHelpFuncs()->getVisibleSize().width){
+            Sprites::getInstance()->listCactus.at(i)->setPosition(Vec2(
+                 Sprites::getInstance()->listCactus.at(i)->getPosition().x - gameSpeed * deltaTime , GROUND_HEIGHT
+            ));
+        } 
+       for(int i = 0; i < Sprites::getInstance()->listCactus.size(); i ++){
+             if(Sprites::getInstance()->listCactus.at(i)->getPosition().x <= 0){
+                 timeAddCatus -= deltaTime;
+                 if(timeAddCatus <= 0){        
+                    Sprites::getInstance()->listCactus.at(i)->setPosition(Helper::getHelpFuncs()->getVisibleSize().width + randomValueBetween(10,200), GROUND_HEIGHT);
+                    timeAddCatus = 8;
+                    currentScore += 1;
+                     Sprites::getInstance()->lbScore->setString(std::to_string(currentScore));
+                 }
+                
+             }
+        }  
+
 }
-
-
 /* Touchs event help function*/
 bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
     removeChild(Sprites::getInstance()->spHand);
     removeChild(Sprites::getInstance()->spLogoVTC);
     removeChild(Sprites::getInstance()->spTitleStart);
     removeChild(Sprites::getInstance()->lbTapToJump);
+    removeChild(Sprites::getInstance()->spTitleGG);
     Character::getInstance()->changeAnimate(DINOA::JUMP);
-
     Vect offset = Vect(1.0f, 0.0f);
-    Vect force = Vect(0.0f, 5001000.0f);
+    Vect force = Vect(0.0f, 13001000.0f);
+    if(timeToRun <= 6) {
+        Sprites::getInstance()->addReadyToRunLabel(this);
+    }
+   if(timeToRun <= 0) {
+     removeChild(Sprites::getInstance()->lbReadyToRun); 
+   }
+     
     Character::getInstance()->dinoPhysicBody->applyForce(force, offset);
  	return true;
 }
 
+ bool HelloWorld::onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event){
+     return true;
+ }
+ bool HelloWorld::onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event){
+    return true;
+ }
 
 /* Physics event help function*/
 bool HelloWorld::onContactBegin(PhysicsContact& contact) {
-    removeChild(Sprites::getInstance()->spTitleGG);
     auto spriteA = (Sprite*)contact.getShapeA()->getBody()->getNode();
     auto spriteB = (Sprite*)contact.getShapeB()->getBody()->getNode();
     int tagA = spriteA->getTag();                                     
     int tagB = spriteB->getTag();
 	
+    //Dino vs ground
     if ( (tagA == TYPE_DINO && tagB == TYPE_WALL) || (tagA == TYPE_WALL && tagB == TYPE_DINO)){
         if(tagA == TYPE_DINO && timeToRun > 0){
-            removeChild(Sprites::getInstance()->spHighScoreIcon);
             Character::getInstance()->changeAnimate(DINOA::WALK);
-
         }
         if(tagB == TYPE_DINO && timeToRun > 0){
-            removeChild(Sprites::getInstance()->spScoreIcon);
             Character::getInstance()->changeAnimate(DINOA::WALK);
-
         }
 
         if (tagA == TYPE_DINO && timeToRun <= 0) {
-            removeChild(Sprites::getInstance()->spHighScoreIcon);
             Character::getInstance()->changeAnimate(DINOA::RUN);
-
         }
         if (tagB == TYPE_DINO && timeToRun <= 0) {
-            removeChild(Sprites::getInstance()->spScoreIcon);
             Character::getInstance()->changeAnimate(DINOA::RUN);
-
         }
     }
+
+    //Dino vs cactus
+    if ( (tagA == TYPE_DINO && tagB == TYPE_CACTUS) || (tagA == TYPE_CACTUS && tagB == TYPE_DINO)){
+        if(tagA == TYPE_DINO ){
+            Character::getInstance()->changeAnimate(DINOA::DIE);
+        }
+        if(tagB == TYPE_DINO ){
+            Character::getInstance()->changeAnimate(DINOA::DIE);
+        }
+    }
+
     return true;
 }
 

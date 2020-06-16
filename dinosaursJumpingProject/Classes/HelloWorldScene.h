@@ -10,8 +10,10 @@ class HelloWorld : public cocos2d::Scene
 {
 public:
     static Scene* createScene();
-    float timeAddCatus = 2;
-    float timeToRun = 10;
+    float timeAddCatus = 8;
+    float timeToRun = 30;
+    int gameSpeed = 150;
+    int currentScore = 0;
     float randomValueBetween(float num1, float num2);
     bool IsPlaying;
     CREATE_FUNC(HelloWorld);
@@ -23,7 +25,8 @@ public:
 
 	
     bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-   
+    bool onTouchMoved(cocos2d::Touch* touch, cocos2d::Event* event);
+    bool onTouchEnded(cocos2d::Touch* touch, cocos2d::Event* event);
 
     // Physics Contact Listener.....//
     bool onContactBegin(PhysicsContact& contact);

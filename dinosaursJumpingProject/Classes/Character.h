@@ -10,7 +10,7 @@ public:
 	Sprite* spDino;
 	void addDino(Scene* scene);
 	Vector<SpriteFrame*> getAnimation(const char* format, int count);
-	PhysicsBody* dinoPhysicBody = PhysicsBody::createBox(Size(DINO_WIDTH,DINO_HEIGHT));
+	PhysicsBody* dinoPhysicBody = PhysicsBody::createBox(Size(DINO_WIDTH * 2/3,DINO_HEIGHT));
 	Animate* currentAnimate;
 	void changeAnimate(int AnimationID );
 	cocos2d::Animation* idleAnim;
