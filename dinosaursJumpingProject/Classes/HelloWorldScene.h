@@ -2,22 +2,35 @@
 #define __HELLOWORLD_SCENE_H__
 
 #include "cocos2d.h"
+#include "CScene.h"
 #include "InfiniteParallaxNode.h"
+#include "Definetions.h"
+
 class HelloWorld : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
-    bool onPhysicContact(PhysicsContact& contact);
-    void changeAnimation(cocos2d::Animate* newAnimate);
+    static Scene* createScene();
+    float timeAddCatus = 2;
+    float timeToRun = 10;
     float randomValueBetween(float num1, float num2);
+    bool IsPlaying;
+    CREATE_FUNC(HelloWorld);
 	
     virtual bool init();
-    void update(float deltaTime);
-    // a selector callback
+    virtual void update(float deltaTime);
+	
     void menuCloseCallback(cocos2d::Ref* pSender);
-    bool OnTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
-    // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+
+	
+    bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+   
+
+    // Physics Contact Listener.....//
+    bool onContactBegin(PhysicsContact& contact);
+    bool onContactPreSolve(PhysicsContact& contact,PhysicsContactPreSolve& solve);
+    void onContactPostSolve(PhysicsContact& contact,const PhysicsContactPostSolve& solve);
+    void onContactSeperate(PhysicsContact& contact);	
+
 private:
    InfiniteParallaxNode* backgroundElements;
    void addPhysicWall();

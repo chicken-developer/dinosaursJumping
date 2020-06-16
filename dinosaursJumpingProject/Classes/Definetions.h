@@ -1,5 +1,11 @@
 //Definitions.h
 
+//Tag
+#define TYPE_WALL 1
+#define TYPE_DINO 2
+#define TRANSITION_SCENE_DURATION 2.0
+#define DEVICE_WIDTH 1080 
+#define DEVICE_HEIGHT 1920 
 //Dino
 #define GRAVITY -1000.0f
 #define DINO_JUMPING_TOLERANCE 3
@@ -8,6 +14,10 @@
 #define DINO_SPEED_X_INITIAL 300.0f
 #define DINO_SPEED_X_INCREASING_RATE 5
 #define DINO_X 300.0f
+#define DINO_WIDTH 400
+#define DINO_HEIGHT 460
+
+
 
 //Cactus
 #define CACTUS_NUMBER 5

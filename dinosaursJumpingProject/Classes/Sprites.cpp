@@ -3,7 +3,7 @@
 #include "Helper.h"
 Sprites* Sprites::_instance = nullptr;
 
-Sprites* Sprites::getSprite() {
+Sprites* Sprites::getInstance() {
 	if (_instance == nullptr) {
 		_instance = new Sprites();
 	}
@@ -46,7 +46,7 @@ void Sprites::addLogoVTC(Scene* scene){
 
 	else {
 		spLogoVTC->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-		spLogoVTC->setScale(0.5);
+		spLogoVTC->setScale(1.2);
 		spLogoVTC->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
 					   		   Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height);
 		scene->addChild(spLogoVTC, 2);
@@ -62,10 +62,80 @@ void Sprites::addTitleStart(Scene* scene){
 
 	else {
 		spTitleStart->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-	//	spTitleStart->setScale(0.5);
+		spTitleStart->setScale(1.2);
 		spTitleStart->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
-							   	  Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 70);
+							   	  Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 200);
 		scene->addChild(spTitleStart, 2);
+	}
+}
+
+void Sprites::addCactus1(Scene* scene) {
+	spCactus_01 = Sprite::createWithSpriteFrameName("cactus_1.png");
+	if (spCactus_01 == nullptr) {
+		problemLoading("Sprite Cactus 1");
+	}
+
+	else {
+		spCactus_01->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		spCactus_01->setScale(1.2);
+		spCactus_01->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
+		scene->addChild(spCactus_01);
+	}
+}
+
+void Sprites::addCactus2(Scene* scene) {
+	spCactus_02 = Sprite::createWithSpriteFrameName("cactus_2.png");
+	if (spCactus_02 == nullptr) {
+		problemLoading("Sprite Cactus 2");
+	}
+
+	else {
+		spCactus_02->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		spCactus_02->setScale(1.2);
+		spCactus_02->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
+		scene->addChild(spCactus_02);
+	}
+}
+
+void Sprites::addCactus3(Scene* scene) {
+	spCactus_03 = Sprite::createWithSpriteFrameName("cactus_3.png");
+	if (spCactus_03 == nullptr) {
+		problemLoading("Sprite Cactus");
+	}
+
+	else {
+		spCactus_03->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		spCactus_03->setScale(1.2);
+		spCactus_03->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10,GROUND_HEIGHT);
+		scene->addChild(spCactus_03);
+	}
+}
+
+void Sprites::addCactus4(Scene* scene) {
+	spCactus_04 = Sprite::createWithSpriteFrameName("cactus_4.png");
+	if (spCactus_04 == nullptr) {
+		problemLoading("Sprite Cactus 4");
+	}
+
+	else {
+		spCactus_04->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		spCactus_04->setScale(1.2);
+		spCactus_04->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
+		scene->addChild(spCactus_04);
+	}
+}
+
+void Sprites::addCactus5(Scene* scene) {
+	spCactus_05 = Sprite::createWithSpriteFrameName("cactus_5.png");
+	if (spCactus_05 == nullptr) {
+		problemLoading("Sprite Cactus");
+	}
+
+	else {
+		spCactus_05->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		spCactus_05->setScale(1.2);
+		spCactus_05->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
+		scene->addChild(spCactus_05);
 	}
 }
 
@@ -120,21 +190,21 @@ void Sprites::addScoreIcon(Scene* scene){
 		spScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
 		spScoreIcon->setScale(1.5);
 		spScoreIcon->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width - 10,
-								 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 10);
+								 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 30);
 		scene->addChild(spScoreIcon);
 	}
 
 }
 
 void Sprites::addScoreLabel(Scene* scene){
-	lbScore = Label::createWithTTF("00", "fonts/score.ttf", 30, Size::ZERO);
+	lbScore = Label::createWithTTF("00", "fonts/score.ttf", 50, Size::ZERO);
 	if (lbScore == nullptr) {
 		problemLoading("Label High Score");
 	}
 	else {
 		lbScore->setAnchorPoint(Vec2::ANCHOR_MIDDLE_RIGHT);
-		lbScore->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width - 50,
-							 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 10);
+		lbScore->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width - 100,
+							 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 30);
 		scene->addChild(lbScore);
 	}
 }
@@ -146,22 +216,22 @@ void Sprites::addHighScoreIcon(Scene* scene){
 	}
 	else {
 		spHighScoreIcon->setAnchorPoint(Vec2::ANCHOR_MIDDLE_TOP);
-		spHighScoreIcon->setScale(1.5);
-		spHighScoreIcon->setPosition(Helper::getHelpFuncs()->getOrigin().x + 35,
+		spHighScoreIcon->setScale(2.0);
+		spHighScoreIcon->setPosition(Helper::getHelpFuncs()->getOrigin().x + 45,
 									 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 10);
 		scene->addChild(spHighScoreIcon);
 	}
 }
 
 void Sprites::addHighScorelabel(Scene* scene){
-	lbHighScore = Label::createWithTTF("120", "fonts/score.ttf", 30, Size::ZERO);
+	lbHighScore = Label::createWithTTF("120", "fonts/score.ttf", 50, Size::ZERO);
 	if (lbHighScore == nullptr) {
 		problemLoading("Label High Score");
 	}
 	else {
 		lbHighScore->setAnchorPoint(Vec2::ANCHOR_TOP_LEFT);
 		lbHighScore->setPosition(Helper::getHelpFuncs()->getOrigin().x + 10,
-								 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 50);
+								 Helper::getHelpFuncs()->getOrigin().y + Helper::getHelpFuncs()->getVisibleSize().height - 100);
 		scene->addChild(lbHighScore);
 	}
 }
@@ -173,8 +243,8 @@ void Sprites::addTapToJumpLabel(Scene* scene){
 	}
 	else {
 		lbTapToJump->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
-		lbTapToJump->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
-								 Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 80);
+		lbTapToJump->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2 - 20,
+								 Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 150);
 		scene->addChild(lbTapToJump);
 	}
 }
