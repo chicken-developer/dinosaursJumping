@@ -26,7 +26,7 @@ public:
 	Label* lbHighScore;
 	Label* lbTapToJump;
 	Label* lbReadyToRun;
-	Label* lbLifeCounts;
+	Label* lbPlayAgain;
 
 	Vector<SpriteFrame*> getAnimation(const char* format, int count);
 public:
@@ -43,9 +43,10 @@ public:
 	void addScoreIcon(Scene* scene);
 	void addScoreLabel(Scene* scene);
 	void addHighScoreIcon(Scene* scene);
-	void addHighScorelabel(Scene* scene);
+	void addHighScorelabel(Scene* scene, int score);
 	void addTapToJumpLabel(Scene* scene);
-	void addReadyToRunLabel(Scene* scene);
+	void addReadyToRunLabel(Scene* scene); 
+	void addPlayAgaintLabel(Scene* scene);
 	static Sprites* getInstance();
 
 };

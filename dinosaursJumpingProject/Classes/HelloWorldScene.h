@@ -12,15 +12,17 @@ public:
     static Scene* createScene();
     float timeAddCatus = 8;
     float timeToRun = 30;
-    int gameSpeed = 150;
+    float gameSpeed = 150;
     int currentScore = 0;
+    int currentHighScore;
     float randomValueBetween(float num1, float num2);
     bool IsPlaying = false;
+    bool isDead = false;
+    bool checkScore = true;
     CREATE_FUNC(HelloWorld);
 	
     virtual bool init();
     virtual void update(float deltaTime);
-	
     void menuCloseCallback(cocos2d::Ref* pSender);
 
 	
@@ -38,6 +40,8 @@ private:
    InfiniteParallaxNode* backgroundElements;
    void addPhysicWall();
    PhysicsWorld* worldPhysics;
+   Sprite* background1;
+   Sprite* background2;
    void setPhysicWorld(PhysicsWorld* m_world) {
        worldPhysics = m_world;
    }

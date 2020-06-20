@@ -243,8 +243,8 @@ void Sprites::addHighScoreIcon(Scene* scene){
 	}
 }
 
-void Sprites::addHighScorelabel(Scene* scene){
-	lbHighScore = Label::createWithTTF("120", "fonts/score.ttf", 50, Size::ZERO);
+void Sprites::addHighScorelabel(Scene* scene, int score){
+	lbHighScore = Label::createWithTTF(std::to_string(score), "fonts/score.ttf", 50, Size::ZERO);
 	if (lbHighScore == nullptr) {
 		problemLoading("Label High Score");
 	}
@@ -279,5 +279,18 @@ void Sprites::addReadyToRunLabel(Scene* scene){
 		lbReadyToRun->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
 								 Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 500);
 		scene->addChild(lbReadyToRun);
+	}
+}
+
+void Sprites::addPlayAgaintLabel(Scene* scene){
+	lbPlayAgain = Label::createWithTTF("YOU DIED, TAP TO PLAY AGAIN", "fonts/score.ttf", 50, Size::ZERO);
+	if (lbPlayAgain == nullptr) {
+		problemLoading("Label play again");
+	}
+	else {
+		lbPlayAgain->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
+		lbPlayAgain->setPosition(Helper::getHelpFuncs()->getOrigin().x + Helper::getHelpFuncs()->getVisibleSize().width / 2,
+			Helper::getHelpFuncs()->getOrigin().y + GROUND_HEIGHT + 500);
+		scene->addChild(lbPlayAgain);
 	}
 }
