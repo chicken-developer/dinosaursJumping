@@ -78,7 +78,7 @@ void Sprites::addCactusToVector() {
 	else {
 		spCactus_01->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_01->setScale(1.2);
-		spCactus_01->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 10, GROUND_HEIGHT);
+		spCactus_01->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 150, GROUND_HEIGHT);
 		auto cactusBody = PhysicsBody::createBox(Size(spCactus_01->getContentSize()));
 		cactusBody->setDynamic(false);
 		cactusBody->setRotationEnable(false);
@@ -95,7 +95,7 @@ void Sprites::addCactusToVector() {
 	else {
 		spCactus_02->setAnchorPoint(Vec2::ANCHOR_MIDDLE_BOTTOM);
 		spCactus_02->setScale(1.2);
-		spCactus_02->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 1010, GROUND_HEIGHT);
+		spCactus_02->setPosition(Helper::getHelpFuncs()->getVisibleSize().width - 1080, GROUND_HEIGHT);
 		auto cactusBody = PhysicsBody::createBox(Size(spCactus_02->getContentSize()));
 		cactusBody->setContactTestBitmask(0x000001);
 		cactusBody->setDynamic(false);
@@ -281,4 +281,3 @@ void Sprites::addReadyToRunLabel(Scene* scene){
 		scene->addChild(lbReadyToRun);
 	}
 }
-

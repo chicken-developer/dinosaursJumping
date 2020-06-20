@@ -48,7 +48,7 @@ bool HelloWorld::init() {
     Sprites::getInstance()->addRoad_01(this);
     Sprites::getInstance()->addRoad_02(this);
     Sprites::getInstance()->addTitleStart(this);
-    Sprites::getInstance()->addTitleGG(this);
+   // Sprites::getInstance()->addTitleGG(this);
     Sprites::getInstance()->addTapToJumpLabel(this);
     Character::getInstance()->addDino(this);
     Sprites::getInstance()->addCactusToVector();
@@ -74,49 +74,50 @@ bool HelloWorld::init() {
 }
 
 void HelloWorld::update(float deltaTime){
-    //Handle Dino speed & animation
-    timeToRun -= deltaTime;
-    if (timeToRun < 0){
-        timeToRun = 0;  
-        gameSpeed = 250;
-    } 
-        for(int i = 0; i < Sprites::getInstance()->listCactus.size(); i ++){
-          // if(Sprites::getInstance()->listCactus.at(i)->getPosition().x >= Helper::getHelpFuncs()->getVisibleSize().width){
+	if(IsPlaying == true){
+        //Handle Dino speed & animation
+        timeToRun -= deltaTime;
+        if (timeToRun < 0) {
+            timeToRun = 0;
+            gameSpeed = 250;
+        }
+        for (int i = 0; i < Sprites::getInstance()->listCactus.size(); i++) {
+            // if(Sprites::getInstance()->listCactus.at(i)->getPosition().x >= Helper::getHelpFuncs()->getVisibleSize().width){
             Sprites::getInstance()->listCactus.at(i)->setPosition(Vec2(
-                 Sprites::getInstance()->listCactus.at(i)->getPosition().x - gameSpeed * deltaTime , GROUND_HEIGHT
+                Sprites::getInstance()->listCactus.at(i)->getPosition().x - gameSpeed * deltaTime, GROUND_HEIGHT
             ));
-        } 
-       for(int i = 0; i < Sprites::getInstance()->listCactus.size(); i ++){
-             if(Sprites::getInstance()->listCactus.at(i)->getPosition().x <= 0){
-                 timeAddCatus -= deltaTime;
-                 if(timeAddCatus <= 0){        
-                    Sprites::getInstance()->listCactus.at(i)->setPosition(Helper::getHelpFuncs()->getVisibleSize().width + randomValueBetween(10,200), GROUND_HEIGHT);
+        }
+        for (int i = 0; i < Sprites::getInstance()->listCactus.size(); i++) {
+            if (Sprites::getInstance()->listCactus.at(i)->getPosition().x <= 0) {
+                timeAddCatus -= deltaTime;
+                if (timeAddCatus <= 0) {
+                    Sprites::getInstance()->listCactus.at(i)->setPosition(Helper::getHelpFuncs()->getVisibleSize().width + randomValueBetween(10, 200), GROUND_HEIGHT);
                     timeAddCatus = 8;
                     currentScore += 1;
-                     Sprites::getInstance()->lbScore->setString(std::to_string(currentScore));
-                 }
-                
-             }
-        }  
+                    Sprites::getInstance()->lbScore->setString(std::to_string(currentScore));
+                }
 
+            }
+        }
+	}
+  
 }
 /* Touchs event help function*/
 bool HelloWorld::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event){
+    IsPlaying = true;
     removeChild(Sprites::getInstance()->spHand);
     removeChild(Sprites::getInstance()->spLogoVTC);
     removeChild(Sprites::getInstance()->spTitleStart);
     removeChild(Sprites::getInstance()->lbTapToJump);
-    removeChild(Sprites::getInstance()->spTitleGG);
     Character::getInstance()->changeAnimate(DINOA::JUMP);
     Vect offset = Vect(1.0f, 0.0f);
-    Vect force = Vect(0.0f, 13001000.0f);
-    if(timeToRun <= 6) {
+    Vect force = Vect(0.0f, 10001000.0f);
+    if(timeToRun <= 4) {
         Sprites::getInstance()->addReadyToRunLabel(this);
     }
-   if(timeToRun <= 0) {
+    if(timeToRun <= 0) {
      removeChild(Sprites::getInstance()->lbReadyToRun); 
-   }
-     
+    }
     Character::getInstance()->dinoPhysicBody->applyForce(force, offset);
  	return true;
 }
@@ -138,10 +139,12 @@ bool HelloWorld::onContactBegin(PhysicsContact& contact) {
     //Dino vs ground
     if ( (tagA == TYPE_DINO && tagB == TYPE_WALL) || (tagA == TYPE_WALL && tagB == TYPE_DINO)){
         if(tagA == TYPE_DINO && timeToRun > 0){
-            Character::getInstance()->changeAnimate(DINOA::WALK);
+            if (IsPlaying == true) Character::getInstance()->changeAnimate(DINOA::WALK);
+            else Character::getInstance()->changeAnimate(DINOA::IDLE);
         }
         if(tagB == TYPE_DINO && timeToRun > 0){
-            Character::getInstance()->changeAnimate(DINOA::WALK);
+            if (IsPlaying == true) Character::getInstance()->changeAnimate(DINOA::WALK);
+            else Character::getInstance()->changeAnimate(DINOA::IDLE);
         }
 
         if (tagA == TYPE_DINO && timeToRun <= 0) {
@@ -156,9 +159,11 @@ bool HelloWorld::onContactBegin(PhysicsContact& contact) {
     if ( (tagA == TYPE_DINO && tagB == TYPE_CACTUS) || (tagA == TYPE_CACTUS && tagB == TYPE_DINO)){
         if(tagA == TYPE_DINO ){
             Character::getInstance()->changeAnimate(DINOA::DIE);
+            IsPlaying = false;
         }
         if(tagB == TYPE_DINO ){
             Character::getInstance()->changeAnimate(DINOA::DIE);
+            IsPlaying = false;
         }
     }
 

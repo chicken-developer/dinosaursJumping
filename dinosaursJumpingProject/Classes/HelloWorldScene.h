@@ -15,7 +15,7 @@ public:
     int gameSpeed = 150;
     int currentScore = 0;
     float randomValueBetween(float num1, float num2);
-    bool IsPlaying;
+    bool IsPlaying = false;
     CREATE_FUNC(HelloWorld);
 	
     virtual bool init();

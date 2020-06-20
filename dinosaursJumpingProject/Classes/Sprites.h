@@ -26,6 +26,7 @@ public:
 	Label* lbHighScore;
 	Label* lbTapToJump;
 	Label* lbReadyToRun;
+	Label* lbLifeCounts;
 
 	Vector<SpriteFrame*> getAnimation(const char* format, int count);
 public:
