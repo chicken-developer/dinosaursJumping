@@ -13,7 +13,7 @@ Scene* HelloWorld::createScene(){
     auto scene = Scene::createWithPhysics();
     Vect gravity(0.0f, -800.0f);
     scene->getPhysicsWorld()->setGravity(gravity);
-    scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL); 
+   // scene->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL); 
     auto layer = HelloWorld::create();
     layer->setPhysicWorld(scene->getPhysicsWorld());
     scene->addChild(layer);
@@ -98,6 +98,7 @@ void HelloWorld::update(float deltaTime){
         if (timeToRun < 0) {
             timeToRun = 0;
             gameSpeed = 250;
+                removeChild(Sprites::getInstance()->lbReadyToRun);
         }
         for (int i = 0; i < Sprites::getInstance()->listCactus.size(); i++) {
              Sprites::getInstance()->listCactus.at(i)->setPosition(Vec2(
